@@ -12,6 +12,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Checkbox;
 
+use Filament\Support\Icons\Heroicon;
+
 use Filament\Actions\Action;
 
 class ProductForm
@@ -30,11 +32,13 @@ class ProductForm
                                 TextInput::make('name')
                                     ->required(),
                                 TextInput::make('sku')
-                                    ->required(),
+                                    ->required()
+                                    ->unique(),
                             ])->columns(2),
 
                             MarkdownEditor::make('description')
-                        ]),
+                        ])
+                        ->icon(Heroicon::DocumentText),
 
                     // Step 2
                     Step::make('Product Price and Stock')
@@ -42,13 +46,17 @@ class ProductForm
                         ->schema([
                             Group::make([
                                 TextInput::make('price')
-                                    ->required(),
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(1),
                                 TextInput::make('stock')
+                                    ->numeric()
                                     ->required(),
                             ])->columns(2),
 
                             MarkdownEditor::make('description')
-                        ]),
+                        ])
+                        ->icon(Heroicon::CurrencyDollar),
 
                     // Step 3
                     Step::make('Media & Status')
@@ -59,7 +67,8 @@ class ProductForm
                                 ->directory('products'),
                             Checkbox::make('is_active'),
                             Checkbox::make('is_featured'),
-                        ]),
+                        ])
+                        ->icon(Heroicon::Photo),
                 ])
                 ->columnSpanFull()
                 ->submitAction(

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('sku')->unique(); //Tambahkan unique agar tidak ada SKU ganda
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('price');
             $table->integer('stock');
             $table->string('image')->nullable(); //nullable agar boleh kosong di awal
