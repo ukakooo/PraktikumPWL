@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Models\Category;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -36,6 +37,7 @@ class PostForm
                                     'min' => 'The title must be at least 3 characters.',
                                     'max' => 'The title must be at most 100 characters.',
                                 ]),
+
                             TextInput::make("slug")
                                 ->unique()
                                 ->rule('min:3')
@@ -43,11 +45,14 @@ class PostForm
                                     'unique' => 'The slug must be unique.',
                                     'min' => 'The slug must be at least 3 characters.',
                                 ]),
+
                             Select::make('category_id')
                                 ->required()
                                 ->relationship('category', 'name')
+                                ->options(Category::all()->pluck("name", "id"))
                                 ->preload()
                                 ->searchable(),
+
                             ColorPicker::make('color'),
                         ])->columns(2),
 
@@ -70,7 +75,10 @@ class PostForm
                     Section::make("Meta Information")
                         ->icon('heroicon-o-information-circle')
                         ->schema([
-                            TagsInput::make("tags"),
+                            Select::make("tags")
+                                ->relationship("tags", "name")
+                                ->multiple()
+                                ->preload(),
                             Checkbox::make("published"),
                             DateTimePicker::make("published_at"),
                         ]),

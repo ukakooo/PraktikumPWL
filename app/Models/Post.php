@@ -14,19 +14,22 @@ class Post extends Model
         'category_id',    
         'color',    
         'image',    
-        'body',    
-        'tags',    
+        'body',  
         'published',    
         'published_at',
     ];
     
     protected $casts = [    
-        'tags' => 'array',    
         'published' => 'boolean',    
         'published_at' => 'date',
     ];
 
     public function category(): BelongsTo {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag');
     }
 }
